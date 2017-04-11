@@ -4,6 +4,8 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntConsumer;
 
+//https://github.com/java8-course/spliterator.git
+
 public class ArrayExample {
     public static class IntArraySpliterator extends Spliterators.AbstractIntSpliterator {
 
@@ -29,13 +31,15 @@ public class ArrayExample {
 
         @Override
         public boolean tryAdvance(IntConsumer action) {
-            if (startInclusive < endExclusive) {
-                action.accept(array[startInclusive]);
-                startInclusive += 1;
-                return true;
-            } else {
+            if (startInclusive >= endExclusive) {
                 return false;
             }
+
+            final int value = array[startInclusive];
+            startInclusive += 1;
+            action.accept(value);
+
+            return true;
         }
 
         @Override
@@ -43,21 +47,26 @@ public class ArrayExample {
             return endExclusive - startInclusive;
         }
 
-
         @Override
         public OfInt trySplit() {
-            int length = endExclusive - startInclusive;
-            if (length <= 1) {
+            final int length = endExclusive - startInclusive;
+            if (length < 2) {
                 return null;
             }
 
-            int middle = startInclusive + length/2;
+            final int mid = startInclusive + length/2;
 
-            final IntArraySpliterator newSpliterator = new IntArraySpliterator(array, startInclusive, middle);
+            final IntArraySpliterator res = new IntArraySpliterator(array, startInclusive, mid);
+            startInclusive = mid;
+            return res;
+        }
 
-            startInclusive = middle;
-
-            return newSpliterator;
+        @Override
+        public void forEachRemaining(IntConsumer action) {
+            for (int i = startInclusive; i < endExclusive; i++) {
+                action.accept(array[i]);
+            }
+            startInclusive = endExclusive;
         }
     }
 }
