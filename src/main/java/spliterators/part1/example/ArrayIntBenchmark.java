@@ -7,6 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
 
+//mvn package -DskipTests
+//java -jar target/benchmarks.jar ArrayIntBenchmark
+
 @Fork(1)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -15,7 +18,7 @@ import java.util.stream.StreamSupport;
 @State(Scope.Thread)
 public class ArrayIntBenchmark {
 
-    @Param({"1000000"})
+    @Param({"100000"})
     public int length;
 
     public int[] array;
