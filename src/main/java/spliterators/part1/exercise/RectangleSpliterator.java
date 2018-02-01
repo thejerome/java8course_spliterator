@@ -28,7 +28,7 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
     }
 
     @Override
-    public OfInt trySplit() {
+    public RectangleSpliterator trySplit() {
         // TODO
         throw new UnsupportedOperationException();
     }

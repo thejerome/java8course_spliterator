@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 @State(Scope.Thread)
 public class ArrayIntBenchmark {
 
-    @Param({"100000"})
+    @Param({"1000000"})
     public int length;
 
     public int[] array;

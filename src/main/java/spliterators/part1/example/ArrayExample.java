@@ -1,10 +1,13 @@
 package spliterators.part1.example;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntConsumer;
+import java.util.stream.StreamSupport;
 
-//https://github.com/java8-course/spliterator.git
+import static java.util.Spliterator.*;
 
 public class ArrayExample {
     public static class IntArraySpliterator extends Spliterators.AbstractIntSpliterator {
@@ -19,11 +22,11 @@ public class ArrayExample {
 
         private IntArraySpliterator(int[] array, int startInclusive, int endExclusive) {
             super(endExclusive - startInclusive,
-                    Spliterator.IMMUTABLE
-                            | Spliterator.ORDERED
-                            | Spliterator.SIZED
-                            | Spliterator.SUBSIZED
-                            | Spliterator.NONNULL);
+                    IMMUTABLE
+                            | ORDERED
+                            | SIZED
+                            | SUBSIZED
+                            | NONNULL);
             this.array = array;
             this.startInclusive = startInclusive;
             this.endExclusive = endExclusive;
@@ -54,7 +57,7 @@ public class ArrayExample {
                 return null;
             }
 
-            final int mid = startInclusive + length/2;
+            final int mid = startInclusive + length / 2;
 
             final IntArraySpliterator res = new IntArraySpliterator(array, startInclusive, mid);
             startInclusive = mid;
@@ -68,5 +71,27 @@ public class ArrayExample {
             }
             startInclusive = endExclusive;
         }
+    }
+
+    public static class OfIteratorExample {
+        public static void main(String[] args) {
+
+            ImmutableList<String> list = ImmutableList.of("1", "3", "2", "1", "3", "2", "1", "3", "8", "1", "3", "2", "1", "3", "2", "1", "3", "2");
+
+            Spliterator<String> spliterator = Spliterators.spliterator(list, IMMUTABLE | SIZED | CONCURRENT);
+            System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
+
+            spliterator = Spliterators.spliterator(list.iterator(), list.size(), IMMUTABLE | SIZED | CONCURRENT);
+            System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
+
+            spliterator = Spliterators.spliterator(list.iterator(), list.size(), IMMUTABLE | SIZED | CONCURRENT | SORTED | ORDERED | CONCURRENT);
+            System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
+
+            spliterator = Spliterators.spliterator(list, IMMUTABLE | SIZED | CONCURRENT | SORTED | ORDERED | CONCURRENT);
+            System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
+
+
+        }
+
     }
 }
