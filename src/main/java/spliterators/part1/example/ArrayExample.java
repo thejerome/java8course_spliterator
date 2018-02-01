@@ -84,11 +84,19 @@ public class ArrayExample {
             spliterator = Spliterators.spliterator(list.iterator(), list.size(), IMMUTABLE | SIZED | CONCURRENT);
             System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
 
-            spliterator = Spliterators.spliterator(list.iterator(), list.size(), IMMUTABLE | SIZED | CONCURRENT | SORTED | ORDERED | CONCURRENT);
+            spliterator = Spliterators.spliterator(list.iterator(), list.size(), IMMUTABLE | SIZED | CONCURRENT | SORTED | ORDERED | CONCURRENT | SUBSIZED);
             System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
 
             spliterator = Spliterators.spliterator(list, IMMUTABLE | SIZED | CONCURRENT | SORTED | ORDERED | CONCURRENT);
             System.out.println(StreamSupport.stream(spliterator, true).max(String::compareTo));
+
+            int[] arrayInt = new int[]{1, 3, 2, 1, 3, 2, 1, 3, 8, 1, 3, 2, 1, 3, 2, 1, 3, 2};
+
+            Spliterator.OfInt spliteratorInt = Spliterators.spliterator(arrayInt, IMMUTABLE | SIZED | CONCURRENT);
+            System.out.println(StreamSupport.intStream(spliteratorInt, true).max());
+
+            spliteratorInt = Spliterators.spliterator(arrayInt, IMMUTABLE | SIZED | CONCURRENT | SORTED | ORDERED | CONCURRENT);
+            System.out.println(StreamSupport.intStream(spliteratorInt, false).max());
 
 
         }
