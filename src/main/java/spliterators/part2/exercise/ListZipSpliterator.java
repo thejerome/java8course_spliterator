@@ -5,32 +5,53 @@ import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-public class ListZipSpliterator<L, R, T>  implements Spliterator<T> {
-    public ListZipSpliterator(List<L> list1, List<R> list2, BiFunction<L, R, T> combiner) {
+public class ListZipSpliterator<L,R,T>  implements Spliterator<T> {
+    private int start;
+    private int end;
+    private List<L> list1;
+    private List<R> list2;
+    private BiFunction<L, R, T> combiner;
 
+    public ListZipSpliterator(List<L> list1, List<R> list2, BiFunction<L, R, T> combiner) {
+        this.list1 = list1;
+        this.list2 = list2;
+        this.combiner = combiner;
+        start = 0;
+        end = list1.size() < list2.size()? list1.size() : list2.size();
+    }
+
+    public ListZipSpliterator(List<L> list1, List<R> list2, BiFunction<L, R, T> combiner, int start, int end) {
+        this.list1 = list1;
+        this.list2 = list2;
+        this.combiner = combiner;
+        this.start = start;
+        this.end = end;
     }
 
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
-        //TODO
-        throw new UnsupportedOperationException();
+        if (end > start) {
+            action.accept(combiner.apply(list1.get(start), list2.get(start)));
+            start++;
+            return true;
+        } else return false;
     }
 
     @Override
     public Spliterator<T> trySplit() {
-        //TODO
-        throw new UnsupportedOperationException();
+        int startNew = start;
+        int mid = (end - start) / 2;
+        start = mid;
+        return new ListZipSpliterator<>(list1, list2, combiner, startNew, mid);
     }
 
     @Override
     public long estimateSize() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return end - start;
     }
 
     @Override
     public int characteristics() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return 0;
     }
 }
