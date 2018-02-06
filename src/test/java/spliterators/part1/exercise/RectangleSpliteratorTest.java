@@ -21,6 +21,7 @@ public class RectangleSpliteratorTest {
                 array[i][j] = ThreadLocalRandom.current().nextInt(5);
             }
         }
+        System.out.println("Generated");
     }
 
     @Test
