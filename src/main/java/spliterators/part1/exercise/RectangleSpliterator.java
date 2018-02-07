@@ -32,9 +32,10 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
         // TODO
         int length = endOuterExclusive - startOuterInclusive;
         int mid = startOuterInclusive + length / 2;
+        RectangleSpliterator rect = new RectangleSpliterator(array, startOuterInclusive, mid, startInnerInclusive);
         startOuterInclusive = mid;
         startInnerInclusive = 0;
-        return new RectangleSpliterator(array, startOuterInclusive, mid, startInnerInclusive);
+        return rect;
     }
 
     @Override
