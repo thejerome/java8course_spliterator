@@ -1,6 +1,5 @@
 package spliterators.part1.exercise;
 
-
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntConsumer;
