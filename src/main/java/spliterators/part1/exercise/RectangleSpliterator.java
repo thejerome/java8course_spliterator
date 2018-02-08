@@ -34,7 +34,7 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
     }
 
     @Override
-    public OfInt trySplit() {
+    public RectangleSpliterator trySplit() {
         final int mid = (endOuterExclusive + startOuterInclusive) / 2;
         final RectangleSpliterator res = new RectangleSpliterator(array, startOuterInclusive, mid
                 , startInnerInclusive, endInnerExclusive);
