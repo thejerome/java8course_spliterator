@@ -4,14 +4,15 @@ package spliterators.part1.exercise;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntConsumer;
+import spliterators.part1.example.ArrayExample.IntArraySpliterator;
 
 public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
 
     private final int innerLength;
     private final int[][] array;
-    private final int startOuterInclusive;
-    private final int endOuterExclusive;
-    private final int startInnerInclusive;
+    private int startOuterInclusive;
+    private int endOuterExclusive;
+    private int startInnerInclusive;
 
     public RectangleSpliterator(int[][] array) {
         this(array, 0, array.length, 0);
@@ -30,7 +31,16 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
     @Override
     public RectangleSpliterator trySplit() {
         // TODO
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        if (endOuterExclusive - startInnerInclusive < 2) {
+            return null;
+        } else {
+            int mid = (endOuterExclusive + startOuterInclusive) / 2;
+            int startOuterInclusiveNew = startOuterInclusive;
+            startOuterInclusive = mid;
+            return new RectangleSpliterator(array, startOuterInclusiveNew, mid, 0);
+        }
+
     }
 
     @Override
@@ -41,6 +51,17 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
     @Override
     public boolean tryAdvance(IntConsumer action) {
         // TODO
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        if (startOuterInclusive < endOuterExclusive) {
+            action.accept(array[startOuterInclusive][startInnerInclusive++]);
+            if (startInnerInclusive == innerLength) {
+                startInnerInclusive = 0;
+                startOuterInclusive++;
+            }
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

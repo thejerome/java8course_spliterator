@@ -1,5 +1,6 @@
 package spliterators.part1.exercise;
 
+import java.util.Spliterator;
 import org.junit.Before;
 import org.junit.Test;
 
