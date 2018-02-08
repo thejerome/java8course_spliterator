@@ -72,7 +72,9 @@ public class ZipperTest {
                 StreamSupport.stream(spliterator, false)
         ).collect(toList());
 
-        assertEquals(ImmutableList.of("1-5", "2-6", "3-7", "4-8"), collected);
+        final ImmutableList<String> expected = ImmutableList.of("1-5", "2-6", "3-7", "4-8");
+        assertEquals(expected.size(), collected.size());
+        assertTrue(expected.containsAll(collected));
 
     }
 
