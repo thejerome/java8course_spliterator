@@ -5,8 +5,8 @@ import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-public class ListZipSpliterator<T>  implements Spliterator<T> {
-    public <L, R> ListZipSpliterator(List<L> list1, List<R> list2, BiFunction<L, R, T> combiner) {
+public class ListZipSpliterator<L, R, T>  implements Spliterator<T> {
+    public ListZipSpliterator(List<L> list1, List<R> list2, BiFunction<L, R, T> combiner) {
 
     }
 
