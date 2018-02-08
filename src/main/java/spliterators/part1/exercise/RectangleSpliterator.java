@@ -9,38 +9,57 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
 
     private final int innerLength;
     private final int[][] array;
-    private final int startOuterInclusive;
+    private int startOuterInclusive;
     private final int endOuterExclusive;
-    private final int startInnerInclusive;
+    private int startInnerInclusive;
+    private final int endInnerExclusive;
 
     public RectangleSpliterator(int[][] array) {
-        this(array, 0, array.length, 0);
+        this(array, 0, array.length, 0
+                , array.length == 0 ? 0 : array[0].length);
     }
 
-    private RectangleSpliterator(int[][] array, int startOuterInclusive, int endOuterExclusive, int startInnerInclusive) {
-        super(Long.MAX_VALUE, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.NONNULL);
+    private RectangleSpliterator(final int[][] array, final int startOuterInclusive
+            , final int endOuterExclusive, final int startInnerInclusive
+            , final int endInnerExclusive) {
+        super(Long.MAX_VALUE, Spliterator.IMMUTABLE | Spliterator.ORDERED
+                | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.NONNULL);
 
-        innerLength = array.length == 0 ? 0 : array[0].length;
+        this.endInnerExclusive = endInnerExclusive;
         this.array = array;
         this.startOuterInclusive = startOuterInclusive;
         this.endOuterExclusive = endOuterExclusive;
         this.startInnerInclusive = startInnerInclusive;
+        innerLength = array.length == 0 ? 0 : array[0].length;
     }
 
     @Override
-    public RectangleSpliterator trySplit() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public OfInt trySplit() {
+        final int mid = (endOuterExclusive + startOuterInclusive) / 2;
+        final RectangleSpliterator res = new RectangleSpliterator(array, startOuterInclusive, mid
+                , startInnerInclusive, endInnerExclusive);
+        startOuterInclusive = mid;
+        startInnerInclusive = 0;
+        return res;
     }
 
     @Override
     public long estimateSize() {
-        return ((long) endOuterExclusive - startOuterInclusive)*innerLength - startInnerInclusive;
+        return ((long) endOuterExclusive - startOuterInclusive) * innerLength - startInnerInclusive;
     }
 
     @Override
-    public boolean tryAdvance(IntConsumer action) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public boolean tryAdvance(final IntConsumer action) {
+        if (startOuterInclusive >= endOuterExclusive) {
+            return false;
+        } else {
+            final int value = array[startOuterInclusive][startInnerInclusive++];
+            action.accept(value);
+            if (startInnerInclusive >= endInnerExclusive) {
+                startOuterInclusive++;
+                startInnerInclusive = 0;
+            }
+        }
+        return true;
     }
 }
