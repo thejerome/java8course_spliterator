@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class ListZipSpliterator<L, R, T> implements Spliterator<T> {
     private List<T> initValues;
-    private int startVal = 0;
+    private int startVal;
     private int endVal;
 
     public ListZipSpliterator(List<L> list1, List<R> list2, BiFunction<L, R, T> combiner) {
@@ -27,8 +27,7 @@ public class ListZipSpliterator<L, R, T> implements Spliterator<T> {
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
         if (startVal < endVal) {
-            action.accept(initValues.get(startVal));
-            startVal++;
+            action.accept(initValues.get(startVal++));
             return true;
         } else {
             return false;
