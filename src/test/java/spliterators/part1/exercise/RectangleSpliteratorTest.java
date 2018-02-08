@@ -3,7 +3,6 @@ package spliterators.part1.exercise;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Spliterator;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.IntConsumer;
