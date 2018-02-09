@@ -36,7 +36,12 @@ public class ListZipSpliterator<L, R, T> implements Spliterator<T> {
             return false;
         }
 
-        action.accept(combiner.apply(list1.get(startInclusive), list2.get(startInclusive++)));
+        try {
+            action.accept(combiner.apply(list1.get(startInclusive), list2.get(startInclusive++)));
+        }
+        catch(Exception e) {
+
+        }
         return true;
     }
 
@@ -48,7 +53,12 @@ public class ListZipSpliterator<L, R, T> implements Spliterator<T> {
         if (length < 2) {
             return null;
         }
-        return new ListZipSpliterator(list1, list2, combiner, (endExclusive + startInclusive) / 2, endExclusive);
+
+        int newStart = startInclusive;
+        int mid = startInclusive + (endExclusive - startInclusive) / 2;
+        startInclusive = mid;
+
+        return new ListZipSpliterator(list1, list2, combiner, newStart, mid);
     }
 
     @Override
