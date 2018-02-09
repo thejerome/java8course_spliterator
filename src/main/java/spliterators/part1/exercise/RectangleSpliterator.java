@@ -1,17 +1,16 @@
 package spliterators.part1.exercise;
 
-
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntConsumer;
 
 public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
 
-    private final int innerLength;
-    private final int[][] array;
-    private final int startOuterInclusive;
-    private final int endOuterExclusive;
-    private final int startInnerInclusive;
+    private int innerLength;
+    private int[][] array;
+    private int startOuterInclusive;
+    private int endOuterExclusive;
+    private int startInnerInclusive;
 
     public RectangleSpliterator(int[][] array) {
         this(array, 0, array.length, 0);
@@ -29,18 +28,34 @@ public class RectangleSpliterator extends Spliterators.AbstractIntSpliterator {
 
     @Override
     public RectangleSpliterator trySplit() {
-        // TODO
-        throw new UnsupportedOperationException();
+        final int length = endOuterExclusive - startOuterInclusive;
+        if (length < 2) {
+            return null;
+        }
+
+        final int mid = startOuterInclusive + length / 2;
+        final RectangleSpliterator rectSplit = new RectangleSpliterator(array, startOuterInclusive, mid, 0);
+        startOuterInclusive = mid;
+        return rectSplit;
     }
 
     @Override
     public long estimateSize() {
-        return ((long) endOuterExclusive - startOuterInclusive)*innerLength - startInnerInclusive;
+        return ((long) endOuterExclusive - startOuterInclusive) * innerLength - startInnerInclusive;
     }
 
     @Override
     public boolean tryAdvance(IntConsumer action) {
-        // TODO
-        throw new UnsupportedOperationException();
+        if (startOuterInclusive < endOuterExclusive) {
+            if (startInnerInclusive < innerLength) {
+                action.accept(array[startOuterInclusive][startInnerInclusive++]);
+                return true;
+            } else {
+                startOuterInclusive++;
+                startInnerInclusive = 0;
+                return tryAdvance(action);
+            }
+        }
+        return false;
     }
 }
