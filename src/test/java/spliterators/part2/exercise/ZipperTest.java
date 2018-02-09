@@ -55,7 +55,7 @@ public class ZipperTest {
 
     @Test
     public void zipperSpliterator() throws Exception {
-        ListZipSpliterator<String> spliterator = new ListZipSpliterator<>(
+        ListZipSpliterator<String, String, String> spliterator = new ListZipSpliterator<>(
                 ImmutableList.of("1", "2", "3", "4"),
                 ImmutableList.of("5", "6", "7", "8", "9"),
                 (l, r) -> String.join("-", l, r)
@@ -72,7 +72,7 @@ public class ZipperTest {
                 StreamSupport.stream(spliterator, false)
         ).collect(toList());
 
-        assertEquals(ImmutableList.of("1-4", "2-5", "3-6", "4-8"), collected);
+        assertEquals(ImmutableList.of("1-5", "2-6", "3-7", "4-8"), collected);
 
     }
 
