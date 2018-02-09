@@ -37,10 +37,13 @@ public class ListZipSpliterator<L, R, T> implements Spliterator<T> {
         }
 
         try {
-            action.accept(combiner.apply(list1.get(startInclusive), list2.get(startInclusive++)));
+            action.accept(combiner.apply(
+                    list1.get(startInclusive),
+                    list2.get(startInclusive++))
+            );
         }
         catch(Exception e) {
-
+            e.printStackTrace();
         }
         return true;
     }
